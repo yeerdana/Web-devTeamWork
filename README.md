@@ -1,285 +1,257 @@
-# 任务管理系统 - Task Manager
+# Task Manager System
 
-## 项目概述
-
-这是一个简单而强大的**任务管理系统 (Todo/Task Manager)**,采用 **Angular + Django REST Framework** 架构。
-
-### 核心功能
-
-**用户可以:**
-- 注册/登录账户 (JWT 认证)
-- 创建、编辑、删除任务
-- 设置任务优先级 (低、中、高)
-- 更新任务状态 (待处理、进行中、已完成)
-- 查看任务统计信息
-- 按状态和优先级筛选任务
+## Project Overview
+This is a simple yet powerful Task Management System (Todo/Task Manager) built using Angular + Django REST Framework architecture.
 
 ---
 
-## 项目结构
+## Core Features
+Users can:
 
-```
+- Register/Login (JWT Authentication)
+- Create, edit, and delete tasks
+- Set task priority (low, medium, high)
+- Update task status (pending, in progress, completed)
+- View task statistics
+- Filter tasks by status and priority
+
+---
+
+## Project Structure
+
 TeamWorkWeb/
-├── backend/                    # Django 后端
-│   ├── todo_backend/          # 主项目配置
-│   ├── tasks/                 # 任务应用
-│   │   ├── models.py          # 2 个模型
-│   │   ├── serializers.py     # 2 个序列化器
-│   │   ├── views.py           # 2 个 FBV
-│   │   ├── views_cbv.py       # 2 个 CBV
+├── backend/                    # Django Backend
+│   ├── todo_backend/          # Main project configuration
+│   ├── tasks/                 # Task application
+│   │   ├── models.py          # 2 models
+│   │   ├── serializers.py     # 2 serializers
+│   │   ├── views.py           # 2 FBV
+│   │   ├── views_cbv.py       # 2 CBV
 │   │   └── admin.py
-│   ├── users/                 # 用户应用
+│   ├── users/                 # User application
 │   │   ├── serializers.py
-│   │   ├── views.py           # 3 个认证视图
+│   │   ├── views.py           # 3 authentication views
 │   │   └── admin.py
 │   ├── manage.py
 │   ├── requirements.txt
 │   └── venv/
 │
-├── frontend/                   # Angular 前端 (英文)
-│   ├── auth.service.ts        # 认证服务
-│   ├── task.service.ts        # 任务服务
-│   ├── auth.interceptor.ts    # HTTP 拦截器
-│   ├── login.component.ts     # 登录组件
-│   ├── task-list.component.ts # 任务列表
-│   ├── app.component.ts       # 主组件
-│   └── app.routes.ts          # 路由配置
+├── frontend/                   # Angular Frontend (English)
+│   ├── auth.service.ts        # Authentication service
+│   ├── task.service.ts        # Task service
+│   ├── auth.interceptor.ts    # HTTP interceptor
+│   ├── login.component.ts     # Login component
+│   ├── task-list.component.ts # Task list component
+│   ├── app.component.ts       # Main component
+│   └── app.routes.ts          # Routing configuration
 │
-├── README.md                   # 项目说明 (中文)
-├── Postman_Collection.json     # API 测试集合
-└── START.sh                    # 启动脚本
-```
+├── README.md                   # Project documentation (Chinese)
+├── Postman_Collection.json     # API testing collection
+└── START.sh                    # Startup script
 
 ---
 
-## 技术栈
+## Tech Stack
 
-### 后端
-- **Django 4.2+**
-- **Django REST Framework**
-- **djangorestframework-simplejwt** (JWT 认证)
-- **django-cors-headers** (跨域支持)
-- **SQLite** (数据库)
+### Backend
+- Django 4.2+
+- Django REST Framework
+- djangorestframework-simplejwt (JWT Authentication)
+- django-cors-headers (CORS support)
+- SQLite (Database)
 
-### 前端
-- **Angular 17+**
-- **TypeScript**
-- **RxJS**
-- **HttpClient**
-- **Angular Router**
-- **FormsModule**
-
----
-
-## 数据模型
-
-### 后端模型 (2 个)
-
-1. **Task**
-   - title (标题)
-   - description (描述)
-   - status (状态: pending/in_progress/completed)
-   - priority (优先级: low/medium/high)
-   - due_date (截止日期)
-   - user (用户 - ForeignKey)
-   - created_at, updated_at
-
-2. **TaskCategory**
-   - name (分类名称)
-   - user (用户 - ForeignKey)
-   - created_at
+### Frontend
+- Angular 17+
+- TypeScript
+- RxJS
+- HttpClient
+- Angular Router
+- FormsModule
 
 ---
 
-## API 端点
+## Data Models
 
-### 认证 (3 个)
-- `POST /api/auth/register/` - 注册
-- `POST /api/auth/login/` - 登录
-- `POST /api/auth/logout/` - 登出
+### Backend Models (2)
 
-### 任务 - FBV (2 个)
-- `GET/POST /api/tasks/` - 获取列表/创建任务
-- `GET/PUT/DELETE /api/tasks/<id>/` - 获取/更新/删除任务
+#### Task
+- title
+- description
+- status (pending / in_progress / completed)
+- priority (low / medium / high)
+- due_date
+- user (ForeignKey)
+- created_at, updated_at
 
-### 任务 - CBV (2 个)
-- `GET /api/tasks/stats/` - 获取任务统计
-- `GET /api/tasks/filter/` - 按状态/优先级筛选
-
----
-
-## 序列化器 (2 个)
-
-1. **TaskCategorySerializer** (Serializer)
-   - 基础序列化
-
-2. **TaskSerializer** (ModelSerializer)
-   - 产品序列化
+#### TaskCategory
+- name
+- user (ForeignKey)
+- created_at
 
 ---
 
-## 视图
+## API Endpoints
 
-### FBV (2 个)
-- `task_list` - GET/POST 任务列表
-- `task_detail` - GET/PUT/DELETE 单个任务
+### Authentication (3)
+- POST /api/auth/register/ – Register
+- POST /api/auth/login/ – Login
+- POST /api/auth/logout/ – Logout
 
-### CBV (2 个)
-- `TaskStatsView` - 获取统计信息
-- `TaskFilterView` - 筛选任务
+### Tasks - FBV (2)
+- GET/POST /api/tasks/ – List/Create tasks
+- GET/PUT/DELETE /api/tasks/<id>/ – Retrieve/Update/Delete task
 
-### 认证视图 (3 个)
-- `RegisterView` - 用户注册
-- `LoginView` - 用户登录
-- `LogoutView` - 用户登出
-
----
-
-## 前端功能
-
-### 服务 (2 个)
-- **AuthService** - 用户认证
-- **TaskService** - 任务管理
-
-### 组件 (2 个)
-- **LoginComponent** - 登录页面
-- **TaskListComponent** - 任务列表
-
-### 功能
-- HTTP 拦截器 (自动添加 Token)
-- 路由配置 (3 个路由)
-- 表单控件 (4+ 个)
-- 事件处理 (4+ 个)
-- 错误处理
-- 响应式设计
+### Tasks - CBV (2)
+- GET /api/tasks/stats/ – Task statistics
+- GET /api/tasks/filter/ – Filter tasks
 
 ---
 
-## 作业要求完成情况
-
-### ✅ 前端要求 (9/9)
-- [x] 接口和服务与后端 API 交互
-- [x] 至少 4 个点击事件触发 API 请求
-- [x] 至少 4 个表单控件使用 [(ngModel)]
-- [x] 基础 CSS 样式
-- [x] 路由模块 (3+ 命名路由)
-- [x] @for 和 @if 条件渲染
-- [x] JWT 认证 + HTTP 拦截器
-- [x] 至少 1 个 Angular Service
-- [x] API 错误处理
-
-### ✅ 后端要求 (11/11)
-- [x] 至少 4 个模型 (Task, TaskCategory, User, 内置模型)
-- [x] 至少 2 个 ForeignKey 关系 (Task→User, TaskCategory→User)
-- [x] 至少 2 个 Serializer (TaskCategorySerializer, TaskSerializer)
-- [x] 至少 2 个 ModelSerializer (TaskDetailSerializer)
-- [x] 至少 2 个 FBV (task_list, task_detail)
-- [x] 至少 2 个 CBV (TaskStatsView, TaskFilterView)
-- [x] Token 认证 (JWT + 登录/登出)
-- [x] 完整 CRUD 操作 (任务)
-- [x] 关联到认证用户 (request.user)
-- [x] CORS 配置
-- [x] Postman 集合
+## Serializers (2)
+- TaskCategorySerializer (Serializer) – Basic serialization
+- TaskSerializer (ModelSerializer) – Model-based serialization
 
 ---
 
-## 快速启动
+## Views
 
-### 后端启动
+### FBV (2)
+- task_list – GET/POST task list
+- task_detail – GET/PUT/DELETE single task
 
-```bash
-cd ~/Desktop/TeamWorkWeb/backend
-source venv/bin/activate
-python manage.py migrate
-python manage.py createsuperuser  # 创建管理员
-python manage.py runserver
-```
+### CBV (2)
+- TaskStatsView – Get statistics
+- TaskFilterView – Filter tasks
 
-访问:
+### Authentication Views (3)
+- RegisterView – User registration
+- LoginView – User login
+- LogoutView – User logout
+
+---
+
+## Frontend Features
+
+### Services (2)
+- AuthService – User authentication
+- TaskService – Task management
+
+### Components (2)
+- LoginComponent – Login page
+- TaskListComponent – Task list
+
+### Functionality
+- HTTP Interceptor (auto attach JWT token)
+- Routing (3+ routes)
+- Form controls (4+ using ngModel)
+- Event handling (4+ events)
+- Error handling
+- Responsive design
+
+---
+
+## Assignment Requirements Completion
+
+### Frontend (9/9)
+- Interface and services interact with backend API
+- At least 4 click events triggering API calls
+- At least 4 form controls using ngModel
+- Basic CSS styling
+- Routing module (3+ named routes)
+- Conditional rendering (@for and @if)
+- JWT authentication + HTTP interceptor
+- At least 1 Angular service
+- API error handling
+
+### Backend (11/11)
+- At least 4 models (Task, TaskCategory, User, built-in models)
+- At least 2 ForeignKey relationships (Task → User, TaskCategory → User)
+- At least 2 serializers (TaskCategorySerializer, TaskSerializer)
+- At least 2 ModelSerializers (TaskDetailSerializer)
+- At least 2 FBV (task_list, task_detail)
+- At least 2 CBV (TaskStatsView, TaskFilterView)
+- Token authentication (JWT + login/logout)
+- Full CRUD operations (tasks)
+- Linked to authenticated user (request.user)
+- CORS configuration
+- Postman collection
+
+---
+
+## Quick Start
+
+### Backend
+cd ~/Desktop/TeamWorkWeb/backend  
+source venv/bin/activate  
+python manage.py migrate  
+python manage.py createsuperuser  
+python manage.py runserver  
+
+Access:
 - API: http://localhost:8000/api/
-- 管理后台: http://localhost:8000/admin/
-
-### 前端启动
-
-```bash
-cd ~/Desktop/TeamWorkWeb/frontend/shopping-frontend
-npm install
-ng serve
-```
-
-访问: http://localhost:4200
+- Admin: http://localhost:8000/admin/
 
 ---
 
-## 防御演示流程 (5-7 分钟)
+### Frontend
+cd ~/Desktop/TeamWorkWeb/frontend/shopping-frontend  
+npm install  
+ng serve  
 
-### 1. 项目介绍 (1 分钟)
-- 项目名称: 任务管理系统
-- 功能: 用户认证、任务管理、统计分析
-- 技术栈: Angular + Django REST Framework
-
-### 2. 架构说明 (2 分钟)
-- 前后端分离架构
-- JWT 认证流程
-- 数据库模型关系
-
-### 3. 代码演示 (1 分钟)
-- 关键模型 (Task, TaskCategory)
-- 序列化器实现
-- Service 通信
-
-### 4. 功能演示 (2-3 分钟)
-- 用户登录
-- 创建任务
-- 更新任务状态
-- 查看统计信息
-- 筛选任务
-
-### 5. Q&A (2-3 分钟)
-- 回答评委问题
+Access:
+- http://localhost:4200
 
 ---
 
-## 团队信息
+## Defense Demo Flow (5–7 minutes)
 
-**团队成员:**
+### 1. Project Introduction (1 min)
+- Project: Task Manager
+- Features: Authentication, task management, statistics
+- Tech: Angular + Django REST Framework
+
+### 2. Architecture (2 min)
+- Frontend-backend separation
+- JWT authentication flow
+- Database model relationships
+
+### 3. Code Demo (1 min)
+- Key models (Task, TaskCategory)
+- Serializer implementation
+- Service communication
+
+### 4. Feature Demo (2–3 min)
+- User login
+- Create task
+- Update task status
+- View statistics
+- Filter tasks
+
+### 5. Q&A (2–3 min)
+- Answer questions
+
+---
+
+## Team Information
 - Adebieke Yeerdana (24B030037)
 - Zharkyn Fariza (24B030035)
 
-**项目名称:** 任务管理系统 (Task Manager)
-
-**完成日期:** 2026-04-21
-
----
-
-## 项目亮点
-
-✨ **简洁高效**
-- 代码简洁易懂
-- 功能完整
-- 易于扩展
-
-✨ **现代技术**
-- Angular 17+ 最新版本
-- Django REST Framework
-- JWT 认证
-- CORS 支持
-
-✨ **最佳实践**
-- 前后端分离
-- RESTful API 设计
-- 错误处理
-- 代码组织
-
-✨ **完整文档**
-- README.md
-- API 文档
-- Postman 集合
+Project Name: Task Manager  
+Completion Date: 2026-04-21
 
 ---
 
-**项目已完成!** 🎉
+## Project Highlights
+- Clean and efficient code
+- Full functionality
+- Easy to extend
+- Modern technologies (Angular 17+, DRF, JWT)
+- Frontend-backend separation
+- RESTful API design
+- Error handling
+- Well-structured code
+- Complete documentation (README, API, Postman)
 
-所有文件已保存到: `~/Desktop/TeamWorkWeb/`
+---
 
-祝你们防御成功! 🚀
+Project completed.
